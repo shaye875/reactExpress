@@ -1,9 +1,16 @@
 import {promises as fs} from 'fs'
 
 const path = "./data/data.json"
+const pathmessages = "./data/messaes.json"
 
 export async function getData(){
     const data = await fs.readFile(path,"utf8")
+    const arr = await JSON.parse(data)
+    return arr
+}
+
+export async function getMessages(){
+    const data = await fs.readFile(pathmessages,"utf8")
     const arr = await JSON.parse(data)
     return arr
 }
@@ -16,21 +23,25 @@ export async function create(user){
     return arr.length
 }
 
-async function getById(id){
-    const arr = await getData()
+export async function getById(id){
+    const arr2 = []
+    const arr = await getMessages()
     for(let item of arr){
         if(item.id === id){
-            return item
+            arr2.push(item)
         }
     }
-    return false
+    return arr2
 }
 
-async function updateById(id,user){
+export async function updateById(id,task){
     const arr = await getData()
     for(let item of arr){
         if(item.id === id){
-            arr.splice(arr.indexOf(item),user)
+            const messaes = await getMessages()
+            messaes.push({id:id,task:task})
+            await fs.writeFile(pathmessages,JSON.stringify(messaes))
+            await fs.writeFile(path,JSON.stringify(arr))
             return true
         }
     }

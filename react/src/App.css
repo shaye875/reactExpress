@@ -1,0 +1,13 @@
+#all{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 95vh;
+}
+
+#status div{
+  border: solid 0.01rem;
+  height: 30vh;
+  width: 20vw;
+}
