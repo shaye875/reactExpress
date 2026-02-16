@@ -1,20 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState,createContext } from 'react'
 import './App.css'
 import Login from './login/login'
 import Status from './status/status'
 import Messages from './messages/messages'
 
-function App() {
-  const [count, setCount] = useState(0)
+export const Usecontext = createContext()
 
+function App() {
+  const [token, setToken] = useState("")
+  const [username,setUsername] = useState("")
+  const [password,setPassword] = useState("")
+  async function postLogin() {
+    const res = await fetch("http://localhost:3000/api/login",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        username:username,
+        password:password
+      })
+    })
+    const data = await res.json()
+    setToken(data.token)
+  }
   return (
+    <Usecontext value={{token,username,setUsername,password,setPassword,postLogin}}>
     <div id='all'>
-    <Login />
-    <Status />
-    <Messages />
+      <Login />
+      <Status />
+      <Messages />
     </div>
+    </Usecontext>
   )
 }
 
